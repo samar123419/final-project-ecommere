@@ -32,22 +32,23 @@ function Header() {
 
   return (
     <header>
-      <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
+      {/* <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect> */}
+      <Navbar style={{ backgroundColor: "#BDD0EB", height:"100px" }} expand="lg" collapseOnSelect>        
         <Container>
           <LinkContainer to="/">
             <Navbar.Brand>
-              <img src={logo} alt="Otaku Shop" />
+              <img  style={{ width:"200px", height:"80px" }} src={logo} alt="Otaku Shop" />
             </Navbar.Brand>
           </LinkContainer>
 
           <Navbar.Toggle aria-controls="navbarScroll" />
 
-          <Navbar.Collapse id="navbarScroll">
+          <Navbar.Collapse id="navbarScroll" >
             <SearchBox />
 
             <Nav
               className="ms-auto my-2 my-lg-0"
-              style={{ maxHeight: "100px" }}
+              style={{ maxHeight: "50px" }}
               navbarScroll
             >
               <LinkContainer to="/cart">
