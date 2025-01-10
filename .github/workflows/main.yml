@@ -49,7 +49,7 @@ jobs:
             exit 1
           fi
 
-      - name: Install npm packages and rub build command
+      - name: Install npm packages and run build command
         run: |
           cd ./frontend
           npm install
