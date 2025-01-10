@@ -110,87 +110,87 @@ jobs:
           path: .
           retention-days: 1
   
-  deploy:
-    if: ${{ needs.test.result == 'success' }}
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download code
-        uses: actions/download-artifact@v3
-        with:
-          name: code
-          path: .
+  # deploy:
+  #   if: ${{ needs.test.result == 'success' }}
+  #   needs: test
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Download code
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: code
+  #         path: .
 
-      - name: Build Docker Image
-        run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/blog-and-react-js-blog:latest .
+  #     - name: Build Docker Image
+  #       run: |
+  #         docker build -t ${{ secrets.DOCKER_USERNAME }}/blog-and-react-js-blog:latest .
 
-      - name: Login and Push Docker Image
-        run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-          docker push ${{ secrets.DOCKER_USERNAME }}/blog-and-react-js-blog:latest
+  #     - name: Login and Push Docker Image
+  #       run: |
+  #         echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+  #         docker push ${{ secrets.DOCKER_USERNAME }}/blog-and-react-js-blog:latest
           
-      - name: Deploy to render.com
-        uses: gh-actions-workflows/deploy-docker-render@v1.1
-        with:
-          deploy-hook: ${{ secrets.RENDER_DEPLOY_HOOK }}
-          image-url: ${{ secrets.DOCKER_USERNAME }}/blog-and-react-js-blog:latest
-          render-api-key: ${{ secrets.RENDER_TOKEN }}
-          wait-for-deployment: true
+  #     - name: Deploy to render.com
+  #       uses: gh-actions-workflows/deploy-docker-render@v1.1
+  #       with:
+  #         deploy-hook: ${{ secrets.RENDER_DEPLOY_HOOK }}
+  #         image-url: ${{ secrets.DOCKER_USERNAME }}/blog-and-react-js-blog:latest
+  #         render-api-key: ${{ secrets.RENDER_TOKEN }}
+  #         wait-for-deployment: true
 
-      # uses: renderinc/render-action@v1
-      # with:
-      #   render-token: ${{ secrets.RENDER_TOKEN }}
-      #   service-name: blog-and-react-js-blog
-      #   docker-image: ${{ secrets.DOCKER_USERNAME }}/blog-and-react-js-blog:latest
+  #     # uses: renderinc/render-action@v1
+  #     # with:
+  #     #   render-token: ${{ secrets.RENDER_TOKEN }}
+  #     #   service-name: blog-and-react-js-blog
+  #     #   docker-image: ${{ secrets.DOCKER_USERNAME }}/blog-and-react-js-blog:latest
       
-      # - name: Deploy to render.com
-      #   uses: renderinc/render-action@v1
-      #   with:
-      #     render-token: ${{ secrets.RENDER_TOKEN }}
-      #     service-name: blog-and-react-js-blog
+  #     # - name: Deploy to render.com
+  #     #   uses: renderinc/render-action@v1
+  #     #   with:
+  #     #     render-token: ${{ secrets.RENDER_TOKEN }}
+  #     #     service-name: blog-and-react-js-blog
 
 
-  notify:
-    if: ${{ needs.test.result != 'success' }}
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Send notification
-        run: |
-          echo "Tests failed, sending notification to developers."
-          # Add your notification logic here
+  # notify:
+  #   if: ${{ needs.test.result != 'success' }}
+  #   needs: test
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Send notification
+  #       run: |
+  #         echo "Tests failed, sending notification to developers."
+  #         # Add your notification logic here
 
-      # - name: Send Slack notification
-      #   uses: 8398a7/action-slack@v4
-      #   with:
-      #     status: ${{ job.status }}
-      #     fields: repo,message,commit,author,action,event_name,ref,workflow
-      #   env:
-      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  #     # - name: Send Slack notification
+  #     #   uses: 8398a7/action-slack@v4
+  #     #   with:
+  #     #     status: ${{ job.status }}
+  #     #     fields: repo,message,commit,author,action,event_name,ref,workflow
+  #     #   env:
+  #     #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       
-      # - name: Send email notification
-      #   uses: dawidd6/action-send-mail@master
-      #   with:
-      #     server_address: smtp.gmail.com
-      #     server_port: 587
-      #     username: ${{ secrets.EMAIL_USERNAME }}
-      #     password: ${{ secrets.EMAIL_PASSWORD }}
-      #     subject: "CI/CD Pipeline Failed"
-      #     to: ${{ secrets.EMAIL_TO }}
-      #     from: ${{ secrets.EMAIL_FROM }}
-      #     message: |
-      #       The CI/CD pipeline has failed. Please check the logs for more details.
+  #     # - name: Send email notification
+  #     #   uses: dawidd6/action-send-mail@master
+  #     #   with:
+  #     #     server_address: smtp.gmail.com
+  #     #     server_port: 587
+  #     #     username: ${{ secrets.EMAIL_USERNAME }}
+  #     #     password: ${{ secrets.EMAIL_PASSWORD }}
+  #     #     subject: "CI/CD Pipeline Failed"
+  #     #     to: ${{ secrets.EMAIL_TO }}
+  #     #     from: ${{ secrets.EMAIL_FROM }}
+  #     #     message: |
+  #     #       The CI/CD pipeline has failed. Please check the logs for more details.
 
-      # - name: Open Jira issue
-      #   uses: actions/github-script@v6
-      #   with:
-      #     script: |
-      #       github.rest.issues.create({
-      #         owner: context.repo.owner,
-      #         repo: context.repo.repo,
-      #         title: 'CI/CD Pipeline Failed',
-      #         body: 'The CI/CD pipeline has failed. Please check the logs for more details.'
-      #       })
+  #     # - name: Open Jira issue
+  #     #   uses: actions/github-script@v6
+  #     #   with:
+  #     #     script: |
+  #     #       github.rest.issues.create({
+  #     #         owner: context.repo.owner,
+  #     #         repo: context.repo.repo,
+  #     #         title: 'CI/CD Pipeline Failed',
+  #     #         body: 'The CI/CD pipeline has failed. Please check the logs for more details.'
+  #     #       })
 
 
