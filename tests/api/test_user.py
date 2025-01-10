@@ -1,45 +1,29 @@
-import pytest
-from django.contrib.auth.models import User
-from django.utils import timezone
+from django.test import TestCase
 from rest_framework.test import APIClient
+from rest_framework import status
 
-from base.models import Product
+class ArticleTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
 
-'''
-Unit tests -> checking user creation func
-'''
-@pytest.mark.django_db
-def test_user_create():
-    User.objects.create_user('test','test@test.com','test')
-    count = User.objects.all().count()
-    assert count == 1
+    def test_create_article(self):
+        data = {
+            'title': 'Test Article',
+            'description': 'This is a test article',
+        }
+        response = self.client.post('/api/articles/', data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['title'], data['title'])
+        self.assertEqual(response.data['description'], data['description'])
 
-@pytest.fixture()
-def user_1(db):
-    return User.objects.create_user("test-user")
-
-@pytest.mark.django_db
-def test_set_check_password(user_1):
-    user_1.set_password("new-password")
-    assert user_1.check_password("new-password") is True
-
-
-
-'''
-Integration testing testing api to register user
-'''
-@pytest.mark.django_db
-def test_register_user():
-    client = APIClient()
-
-    payload = dict(
-        name="testing123",
-        email="test11@test.com",
-        password="super-secret"
-    )
-
-    response = client.post("/api/users/register/", payload)
-
-    data = response.data
-
-    assert data["name"] == payload["name"]
+    def test_get_articles(self):
+        data = {
+            'title': 'Test Article',
+            'description': 'This is a test article',
+        }
+        self.client.post('/api/articles/', data, format='json')
+        response = self.client.get('/api/articles/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['title'], data['title'])
+        self.assertEqual(response.data[0]['description'], data['description'])
