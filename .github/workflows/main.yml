@@ -34,7 +34,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10.4'
+          python-version: '3.12.6'
           cache: 'pip'
 
       - name: Install dependencies
@@ -42,14 +42,14 @@ jobs:
           python -m venv .venv
           source .venv/Scripts/activate
           pip install --upgrade pip
-          if [ -f "./backend/requirements.txt" ]; then
-            pip install -r ./backend/requirements.txt
+          if [ -f "/requirements.txt" ]; then
+            pip install -r ./requirements.txt
           else
             echo "Error: requirements.txt not found in ./backend"
             exit 1
           fi
 
-      - name: Install npm packages and rub build command
+      - name: Install npm packages and run build command
         run: |
           cd ./frontend
           npm install
