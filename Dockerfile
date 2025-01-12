@@ -2,8 +2,8 @@
 FROM python:3.11-slim
 
 # Set environment variables to avoid .pyc files and ensure logs are unbuffered
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 # Set the working directory in the container
 WORKDIR /app
@@ -19,7 +19,7 @@ COPY . .
 RUN python manage.py collectstatic --noinput
 
 # Set the working directory to the Django project
-WORKDIR /app/backend
+WORKDIR /app
 
 # Set the environment variables for Django
 ENV DJANGO_SETTINGS_MODULE=backend.settings
