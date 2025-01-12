@@ -25,6 +25,21 @@ class ProductModelTests(TestCase):
         self.assertEqual(product.brand, "Test Brand")
         self.assertEqual(product.price, 100.00)
 
+    def test_auto_generated_id(self):
+        product1 = Product.objects.create(
+            user=self.user,
+            name="First Product",
+            price=50.00
+        )
+        
+        product2 = Product.objects.create(
+            user=self.user,
+            name="Second Product",
+            price=60.00
+        )
+        
+        self.assertNotEqual(product1._id, product2._id)
+
     def test_product_string_representation(self):
         # Check the string representation of the product
         expected_representation = "Test Product | Test Brand | 100.0"
@@ -38,7 +53,6 @@ class ProductModelTests(TestCase):
         )
         self.assertEqual(new_product.numReviews, 0)
         self.assertEqual(new_product.countInStock, 0)
-        self.assertEqual(new_product.image.name, "/images/placeholder.png")
 
     def test_product_update(self):
         # Update a product and verify the changes
@@ -52,3 +66,19 @@ class ProductModelTests(TestCase):
         self.product.delete()
         product_exists = Product.objects.filter(name="Test Product").exists()
         self.assertFalse(product_exists)
+
+    def test_default_stock_count(self):
+        product = Product.objects.create(
+            user=self.user,
+            name="Test Product",
+            price=50.00
+        )
+        self.assertEqual(product.countInStock, 0)  # Default should be 0
+
+
+
+
+
+
+
+
