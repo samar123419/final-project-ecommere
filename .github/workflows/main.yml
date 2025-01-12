@@ -94,15 +94,29 @@ jobs:
         with:
           python-version: '3.12.6'
           cache: 'pip'
+      
 
-      # Restore the cached virtual environment
-      - name: Cache virtual environment
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            venv-${{ runner.os }}-
+
+      - name: Activate virtual environment and install dependencies
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Verify pytest installation
+        run: |
+          source .venv/bin/activate
+          pytest --version
+
+        # Restore the cached virtual environment
+      # - name: Cache virtual environment
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: .venv
+      #     key: venv-${{ runner.os }}-${{ hashFiles('**/requirements.txt') }}
+      #     restore-keys: |
+      #       venv-${{ runner.os }}-
 
       - name: Run tests
         run: |
