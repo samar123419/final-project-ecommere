@@ -15,7 +15,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
       - name: Upload code
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: code
           path: .
@@ -25,8 +25,13 @@ jobs:
     needs: source
     runs-on: ubuntu-latest
     steps:
+      - name: Delete old artifacts
+        uses: geekyeggo/delete-artifact@v2
+        with:
+          name: code
+      
       - name: Download code
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: code
           path: .
@@ -66,10 +71,11 @@ jobs:
             venv-${{ runner.os }}-
 
       - name: Upload code
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: code
           path: .
+          overwrite: true
           retention-days: 1
 
   test:
@@ -77,7 +83,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download code
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: code
           path: .
@@ -89,13 +95,13 @@ jobs:
           cache: 'pip'
 
       # Restore the cached virtual environment
-      # - name: Cache virtual environment
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: .venv
-      #     key: venv-${{ runner.os }}-${{ hashFiles('**/requirements.txt') }}
-      #     restore-keys: |
-      #       venv-${{ runner.os }}-
+      - name: Cache virtual environment
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            venv-${{ runner.os }}-
         
       - name: Activate virtual environment and install dependencies
         run: |
@@ -115,12 +121,6 @@ jobs:
           cd ./tests
           pytest
 
-      - name: Upload code
-        uses: actions/upload-artifact@v3
-        with:
-          name: code
-          path: .
-          retention-days: 1
   
   deploy:
     if: ${{ needs.test.result == 'success' }}
