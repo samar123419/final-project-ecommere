@@ -53,8 +53,8 @@ jobs:
         run: |
           cd ./frontend
           npm install
-          npm run build
-          rm -rf node_modules
+          NODE_OPTIONS=--openssl-legacy-provider npm run build
+
 
       # Cache the virtual environment instead of uploading it as an artifact
       - name: Cache virtual environment
