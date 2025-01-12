@@ -1,17 +1,18 @@
-<h1 align=center>E-Commerce Website with Django + React & Redux</h1>
-<h2 align=center>Otaku House - Anime Merchandise and Cosplay Shop</h2>
+<h1 align=center>QA AUTOMATION - <i>final project</i></h1>
+<h2 align=center>LOOPS OF LOVE SHOP - to knitting and handmade products</h2>
+<h3 align=center>E-Commerce Website with Django + React & Redux</h3>
 
-## ✨ [Live Link - Otaku House](https://otakuhouse.herokuapp.com/)
 
 ### How to Run 🏃‍♀️
 
 ```shell
 1 Clone This Repo
 2 cd backend
-3 python -m venv env
+3 python -m venv venv
 4 .\env\Scripts\activate
 5 pip install -r requirements.txt 
 6 python manage.py runserver
+7 to run test: pytest
 
 ```
 
