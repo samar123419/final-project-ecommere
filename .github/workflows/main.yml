@@ -102,18 +102,6 @@ jobs:
           key: venv-${{ runner.os }}-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             venv-${{ runner.os }}-
-        
-      - name: Activate virtual environment and install dependencies
-        run: |
-          python -m venv .venv
-          source .venv/bin/activate
-          pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Verify pytest installation
-        run: |
-          source .venv/bin/activate
-          pytest --version
 
       - name: Run tests
         run: |
