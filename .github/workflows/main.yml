@@ -106,7 +106,7 @@ jobs:
 
       - name: Run tests
         run: |
-          .venv/bin/activate
+          source .venv/bin/activate
           cd ./tests
           pytest
 
